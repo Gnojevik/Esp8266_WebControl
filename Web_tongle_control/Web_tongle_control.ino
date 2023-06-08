@@ -86,21 +86,22 @@ const char* html = R"html(
     <input type="checkbox" id="ledToggle" onclick="toggleLed(this.checked)">
     <span class="slider"></span>
   </label>
-  <span class="text" id="ledStatus">Вимкнути</span>
+  <span class="text" id="ledStatus"></span>
 
   <script>
-    function toggleLed(state) {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          // Оновити статус світлодіода
-          document.getElementById("ledStatus").textContent = (this.responseText === "true") ? "Увімкнуто" : "Вимкнуто";
-        }
-      };
-      xhttp.open("GET", "/led?state=" + (state ? "1" : "0"), true);
-      xhttp.send();
-    }
-  </script>
+  function toggleLed(state) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        // Оновити статус світлодіода
+        document.getElementById("ledStatus").textContent = (state) ? "Увімкнено" : "Вимкнуто";
+      }
+    };
+    xhttp.open("GET", "/led?state=" + (state ? "1" : "0"), true);
+    xhttp.send();
+  }
+</script>
+
 </body>
 </html>
 
@@ -109,6 +110,7 @@ const char* html = R"html(
 // Функція обробки запиту на кореневу сторінку
 void handleRoot() {
   server.send(200, "text/html", html);
+  
 }
 
 // Функція обробки запиту на керування світлодіодом
